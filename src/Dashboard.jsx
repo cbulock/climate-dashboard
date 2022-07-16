@@ -97,8 +97,10 @@ const Dashboard = () => {
 	useEffect(() => {
 		const subscribe = async () => {
 			const auth = createLongLivedTokenAuth(
-				'https://bulock.house',
-				'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI1YWMwYjg3MGMyMTc0Y2IyYjRkY2I2ZWFhY2MyZWE0NyIsImlhdCI6MTY1NTc4MDM4NSwiZXhwIjoxOTcxMTQwMzg1fQ.mLogPoQkWjZMQZPCPAE7Inr-ZJJal7BhuXxjgVclCc8',
+				// eslint-disable-next-line no-undef
+				process.env.REACT_APP_HASS_URL,
+				// eslint-disable-next-line no-undef
+				process.env.REACT_APP_HASS_TOKEN,
 			);
 
 			const connection = await createConnection({ auth });
