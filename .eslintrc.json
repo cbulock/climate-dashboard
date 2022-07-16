@@ -1,0 +1,25 @@
+{
+	"extends": ["airbnb", "prettier", "plugin:react/jsx-runtime"],
+	"plugins": ["prettier"],
+	"rules": {
+		"prettier/prettier": ["error"],
+		"react/jsx-indent": ["error", "tab"],
+		"react/jsx-indent-props": ["error", "tab"],
+		"react/function-component-definition": [2, {"namedComponents":  "arrow-function"}]
+	},
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": false
+	},
+    "parserOptions": {
+        "ecmaVersion": 2020
+    },
+	"settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
+  }
+}
