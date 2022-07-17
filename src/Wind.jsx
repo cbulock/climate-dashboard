@@ -30,9 +30,9 @@ const Circle = styled.div`
 
 const CaretWrapper = styled.div`
 	position: absolute;
-	top: -1vw;
+	top: -0.5vw;
 	left: 50%;
-	height: 22vw;
+	height: 21vw;
 	transform: translate(-50%) rotate(${({ $direction }) => $direction}deg);
 	transition: transform 1s;
 `;
