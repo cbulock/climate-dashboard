@@ -6,6 +6,17 @@ import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 const Wrapper = styled.div`
 	grid-area: Wind;
+	display: grid;
+	align-items: center;
+	justify-items: center;
+	grid-template-areas:
+		'.      North   .'
+		'West   Main    East'
+		'.      South   .';
+`;
+
+const CircleWrapper = styled.div`
+	grid-area: Main;
 	position: relative;
 	z-index: 10;
 `;
@@ -77,20 +88,44 @@ const Caret = styled(FontAwesomeIcon)`
 	font-size: 4vw;
 `;
 
+const DirectionLabel = styled.p`
+	margin: 1.5vw;
+	font-size: 2vw;
+`;
+
+const North = styled(DirectionLabel)`
+	grid-area: North;
+`;
+const South = styled(DirectionLabel)`
+	grid-area: South;
+`;
+const East = styled(DirectionLabel)`
+	grid-area: East;
+`;
+const West = styled(DirectionLabel)`
+	grid-area: West;
+`;
+
 const Wind = ({ direction, speed }) => (
 	<Wrapper>
-		<Circle />
-		<CaretWrapper $direction={direction}>
-			<Caret icon={faCaretUp} />
-		</CaretWrapper>
-		<Speed>{speed}</Speed>
-		<SpeedLabel>MPH</SpeedLabel>
-		<DirectionTicks>
-			<Direction1 />
-			<Direction2 />
-			<Direction3 />
-			<Direction4 />
-		</DirectionTicks>
+		<North>N</North>
+		<South>S</South>
+		<East>E</East>
+		<West>W</West>
+		<CircleWrapper>
+			<Circle />
+			<CaretWrapper $direction={direction}>
+				<Caret icon={faCaretUp} />
+			</CaretWrapper>
+			<Speed>{speed}</Speed>
+			<SpeedLabel>MPH</SpeedLabel>
+			<DirectionTicks>
+				<Direction1 />
+				<Direction2 />
+				<Direction3 />
+				<Direction4 />
+			</DirectionTicks>
+		</CircleWrapper>
 	</Wrapper>
 );
 
