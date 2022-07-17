@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
+import { faCaretUp, faWind } from '@fortawesome/free-solid-svg-icons';
 
 const Wrapper = styled.div`
 	grid-area: Wind;
@@ -88,6 +88,8 @@ const Caret = styled(FontAwesomeIcon)`
 	font-size: 4vw;
 `;
 
+const WindIcon = styled(FontAwesomeIcon)``;
+
 const DirectionLabel = styled.p`
 	margin: 2.5vw;
 	font-size: 2.5vw;
@@ -126,6 +128,7 @@ const Wind = ({ direction, speed }) => (
 				<Direction4 />
 			</DirectionTicks>
 		</CircleWrapper>
+		<WindIcon icon={faWind} />
 	</Wrapper>
 );
 
