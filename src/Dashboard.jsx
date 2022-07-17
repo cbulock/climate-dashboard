@@ -14,6 +14,8 @@ import {
 	faWaterLadder,
 } from '@fortawesome/free-solid-svg-icons';
 
+import Wind from './Wind';
+
 const pulse = keyframes`
 	0% {
 		opacity: 1;
@@ -62,12 +64,14 @@ const LocationLabel = styled.p`
 
 const Main = styled.main`
 	align-items: center;
-	justify-content: center;
+	justify-items: center;
 	display: grid;
-	grid-template-columns: 50% auto;
+	grid-template-columns: 50% 50%;
+	grid-template-rows: auto;
 	grid-template-areas:
-		'Outdoors Indoors'
-		'Pool HotTub';
+		'Outdoors Pool'
+		'Indoors HotTub'
+		'. Wind';
 	height: 100vh;
 	background: rgb(2, 204, 255);
 	color: white;
@@ -174,6 +178,10 @@ const Dashboard = () => {
 					{Math.round(entities['sensor.hot_tub_temp']?.state)}°
 				</HotTubTemp>
 			</HotTub>
+			<Wind
+				speed={Math.round(entities['sensor.wind_avg']?.state)}
+				direction={entities['sensor.wind_direction']?.state}
+			/>
 		</Main>
 	);
 };
