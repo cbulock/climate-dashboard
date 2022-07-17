@@ -30,6 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "docker-build": "docker build -t cbulock/climate-dashboard:dev .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
