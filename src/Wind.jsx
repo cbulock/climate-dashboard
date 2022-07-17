@@ -22,17 +22,17 @@ const CircleWrapper = styled.div`
 `;
 
 const Circle = styled.div`
-	height: 16vw;
-	width: 16vw;
+	height: 20vw;
+	width: 20vw;
 	border-radius: 50%;
 	background: rgb(2, 204, 255);
 `;
 
 const CaretWrapper = styled.div`
 	position: absolute;
-	top: 0vw;
+	top: -1vw;
 	left: 50%;
-	height: 16vw;
+	height: 22vw;
 	transform: translate(-50%) rotate(${({ $direction }) => $direction}deg);
 	transition: transform 1s;
 `;
@@ -43,14 +43,14 @@ const Speed = styled.div`
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-weight: 900;
-	font-size: 8vw;
+	font-size: 12vw;
 `;
 const SpeedLabel = styled.p`
 	position: absolute;
-	top: 12vw;
+	top: 16vw;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size: 1vw;
+	font-size: 1.5vw;
 	margin: 0;
 `;
 
@@ -58,7 +58,7 @@ const DirectionTicks = styled.div`
 	position: absolute;
 	top: -1vw;
 	left: 50%;
-	height: 18vw;
+	height: 22vw;
 	transform: translate(0, -50%);
 	z-index: -1;
 `;
@@ -89,8 +89,8 @@ const Caret = styled(FontAwesomeIcon)`
 `;
 
 const DirectionLabel = styled.p`
-	margin: 1.5vw;
-	font-size: 2vw;
+	margin: 2.5vw;
+	font-size: 2.5vw;
 `;
 
 const North = styled(DirectionLabel)`
