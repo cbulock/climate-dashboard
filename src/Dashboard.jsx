@@ -14,6 +14,7 @@ import {
 	faWaterLadder,
 } from '@fortawesome/free-solid-svg-icons';
 
+import Levels from './Levels';
 import Wind from './Wind';
 
 const pulse = keyframes`
@@ -71,7 +72,7 @@ const Main = styled.main`
 	grid-template-areas:
 		'Outdoors Pool'
 		'Indoors HotTub'
-		'. Wind';
+		'Levels Wind';
 	height: 100vh;
 	background: rgb(2, 204, 255);
 	color: white;
@@ -141,26 +142,31 @@ const Dashboard = () => {
 		subscribe();
 	}, []);
 
+	const outdoorTemp = Math.round(entities['sensor.outdoor_temp']?.state);
+	const indoorTemp = Math.round(entities['sensor.indoor_temp']?.state);
+	const outdoorHumidity = Math.round(
+		entities['sensor.outdoor_humidity']?.state,
+	);
+	const indoorHumidity = Math.round(entities['sensor.indoor_humidity']?.state);
+
 	return (
 		<Main>
 			<Outdoors>
 				<OutdoorTemp>
-					{Math.round(entities['sensor.outdoor_temp']?.state)}°
+					{Number.isNaN(outdoorTemp) ? '?' : outdoorTemp}°
 				</OutdoorTemp>
 				<OutdoorLabel>Outdoors</OutdoorLabel>
 				<OutdoorHumidity>
 					<HumidityIcon icon={faDroplet} />
-					{Math.round(entities['sensor.outdoor_humidity']?.state)}%
+					{Number.isNaN(outdoorHumidity) ? '?' : outdoorHumidity}%
 				</OutdoorHumidity>
 			</Outdoors>
 			<Indoors>
-				<IndoorTemp>
-					{Math.round(entities['sensor.indoor_temp']?.state)}°
-				</IndoorTemp>
+				<IndoorTemp>{Number.isNaN(indoorTemp) ? '?' : indoorTemp}°</IndoorTemp>
 				<IndoorLabel>Indoors</IndoorLabel>
 				<IndoorHumidity>
 					<HumidityIcon icon={faDroplet} />
-					{Math.round(entities['sensor.indoor_humidity']?.state)}%
+					{Number.isNaN(indoorHumidity) ? '?' : indoorHumidity}%
 				</IndoorHumidity>
 			</Indoors>
 			<Pool>
@@ -178,6 +184,7 @@ const Dashboard = () => {
 					{Math.round(entities['sensor.hot_tub_temp']?.state)}°
 				</HotTubTemp>
 			</HotTub>
+			<Levels entities={entities} />
 			<Wind
 				speed={Math.round(entities['sensor.wind_avg']?.state)}
 				direction={entities['sensor.wind_direction']?.state}
