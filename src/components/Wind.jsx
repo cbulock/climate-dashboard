@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp, faWind } from '@fortawesome/free-solid-svg-icons';
+
+import useHassState from '../hooks/useHassState';
 
 const Wrapper = styled.div`
 	grid-area: Wind;
@@ -108,33 +109,33 @@ const West = styled(DirectionLabel)`
 	grid-area: West;
 `;
 
-const Wind = ({ direction, speed }) => (
-	<Wrapper>
-		<North>N</North>
-		<South>S</South>
-		<East>E</East>
-		<West>W</West>
-		<CircleWrapper>
-			<Circle />
-			<CaretWrapper $direction={direction}>
-				<Caret icon={faCaretUp} />
-			</CaretWrapper>
-			<Speed>{speed}</Speed>
-			<SpeedLabel>MPH</SpeedLabel>
-			<DirectionTicks>
-				<Direction1 />
-				<Direction2 />
-				<Direction3 />
-				<Direction4 />
-			</DirectionTicks>
-		</CircleWrapper>
-		<WindIcon icon={faWind} />
-	</Wrapper>
-);
+const Wind = () => {
+	const speed = useHassState('sensor.wind_avg');
+	const direction = useHassState('sensor.wind_direction');
 
-Wind.propTypes = {
-	direction: PropTypes.number.isRequired,
-	speed: PropTypes.number.isRequired,
+	return (
+		<Wrapper>
+			<North>N</North>
+			<South>S</South>
+			<East>E</East>
+			<West>W</West>
+			<CircleWrapper>
+				<Circle />
+				<CaretWrapper $direction={direction}>
+					<Caret icon={faCaretUp} />
+				</CaretWrapper>
+				<Speed>{speed}</Speed>
+				<SpeedLabel>MPH</SpeedLabel>
+				<DirectionTicks>
+					<Direction1 />
+					<Direction2 />
+					<Direction3 />
+					<Direction4 />
+				</DirectionTicks>
+			</CircleWrapper>
+			<WindIcon icon={faWind} />
+		</Wrapper>
+	);
 };
 
 export default Wind;

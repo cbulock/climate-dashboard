@@ -1,15 +1,20 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+
+import { EntitiesProvider } from './context/Entities';
+
 import GlobalStyle from './GlobalStyle';
 import Dashboard from './Dashboard';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<React.StrictMode>
+	<StrictMode>
 		<GlobalStyle />
-		<Dashboard />
-	</React.StrictMode>,
+		<EntitiesProvider>
+			<Dashboard />
+		</EntitiesProvider>
+	</StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

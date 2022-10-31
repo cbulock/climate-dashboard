@@ -1,9 +1,3 @@
-import { useState, useEffect } from 'react';
-import {
-	createConnection,
-	subscribeEntities,
-	createLongLivedTokenAuth,
-} from 'home-assistant-js-websocket';
 import styled, { keyframes } from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,8 +8,11 @@ import {
 	faWaterLadder,
 } from '@fortawesome/free-solid-svg-icons';
 
-import Levels from './Levels';
-import Wind from './Wind';
+import useSubscribe from './hooks/useSubscribe';
+import useHassState from './hooks/useHassState';
+
+import Levels from './components/Levels';
+import Wind from './components/Wind';
 
 const pulse = keyframes`
 	0% {
@@ -125,70 +122,51 @@ const HotTubTemp = styled.div`
 `;
 
 const Dashboard = () => {
-	const [entities, setEntities] = useState({});
+	useSubscribe();
 
-	useEffect(() => {
-		const subscribe = async () => {
-			const auth = createLongLivedTokenAuth(
-				// eslint-disable-next-line no-undef
-				process.env.REACT_APP_HASS_URL,
-				// eslint-disable-next-line no-undef
-				process.env.REACT_APP_HASS_TOKEN,
-			);
+	const outdoorTemp = useHassState('sensor.outdoor_temp');
+	const indoorTemp = useHassState('sensor.indoor_temp');
+	const outdoorHumidity = useHassState('sensor.outdoor_humidity');
+	const indoorHumidity = useHassState('sensor.indoor_humidity');
 
-			const connection = await createConnection({ auth });
-			subscribeEntities(connection, (e) => setEntities(e));
-		};
-		subscribe();
-	}, []);
+	const poolTemp = useHassState('sensor.pool_temp');
+	const poolPump = useHassState('sensor.pool_pump');
 
-	const outdoorTemp = Math.round(entities['sensor.outdoor_temp']?.state);
-	const indoorTemp = Math.round(entities['sensor.indoor_temp']?.state);
-	const outdoorHumidity = Math.round(
-		entities['sensor.outdoor_humidity']?.state,
-	);
-	const indoorHumidity = Math.round(entities['sensor.indoor_humidity']?.state);
+	const hotTubTemp = useHassState('sensor.hot_tub_temp');
 
 	return (
 		<Main>
 			<Outdoors>
-				<OutdoorTemp>
-					{Number.isNaN(outdoorTemp) ? '?' : outdoorTemp}°
-				</OutdoorTemp>
+				<OutdoorTemp>{outdoorTemp}°</OutdoorTemp>
 				<OutdoorLabel>Outdoors</OutdoorLabel>
 				<OutdoorHumidity>
 					<HumidityIcon icon={faDroplet} />
-					{Number.isNaN(outdoorHumidity) ? '?' : outdoorHumidity}%
+					{outdoorHumidity}%
 				</OutdoorHumidity>
 			</Outdoors>
 			<Indoors>
-				<IndoorTemp>{Number.isNaN(indoorTemp) ? '?' : indoorTemp}°</IndoorTemp>
+				<IndoorTemp>{indoorTemp}°</IndoorTemp>
 				<IndoorLabel>Indoors</IndoorLabel>
 				<IndoorHumidity>
 					<HumidityIcon icon={faDroplet} />
-					{Number.isNaN(indoorHumidity) ? '?' : indoorHumidity}%
+					{indoorHumidity}%
 				</IndoorHumidity>
 			</Indoors>
 			<Pool>
 				<PoolTemp>
 					<LargerIcon icon={faWaterLadder} />
-					{Math.round(entities['sensor.pool_temp']?.state)}°
+					{poolTemp}°
 				</PoolTemp>
-				{entities['switch.pool_pump']?.state === 'on' && (
-					<PumpIcon icon={faArrowUpFromWaterPump} />
-				)}
+				{poolPump === 'on' && <PumpIcon icon={faArrowUpFromWaterPump} />}
 			</Pool>
 			<HotTub>
 				<HotTubTemp>
 					<LargerIcon icon={faHotTubPerson} />
-					{Math.round(entities['sensor.hot_tub_temp']?.state)}°
+					{hotTubTemp}°
 				</HotTubTemp>
 			</HotTub>
-			<Levels entities={entities} />
-			<Wind
-				speed={Math.round(entities['sensor.wind_avg']?.state)}
-				direction={entities['sensor.wind_direction']?.state}
-			/>
+			<Levels />
+			<Wind />
 		</Main>
 	);
 };
