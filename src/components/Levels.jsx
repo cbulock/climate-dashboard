@@ -6,19 +6,12 @@ const Wrapper = styled.div`
 	grid-area: Levels;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	background: white;
-	padding: 1vh 3vh;
-	border-radius: 1vh;
 `;
-
-const Roof = styled.div``;
 
 const Level = styled.div`
 	display: grid;
-	background: rgb(2, 204, 255);
+	border: 3px solid white;
 	border-radius: 4vh;
-	padding: 1.5vh;
 	margin: 1vh;
 	grid-template-columns: 3vh auto auto;
 	grid-template-areas: 'Label Temp Humidity';
@@ -26,13 +19,20 @@ const Level = styled.div`
 `;
 
 const LevelItem = styled.p`
-	font-size: 2vh;
+	font-size: 3vh;
+	padding: 1.5vh;
 	margin: 0;
 `;
 
 const Label = styled(LevelItem)`
 	grid-area: Label;
+	justify-self: center;
+	margin: -3px;
+	padding: calc(1.5vh + 3px);
+	border-radius: 4vh 0 0 4vh;
 	font-weight: 900;
+	color: rgb(2, 204, 255);
+	background: white;
 `;
 const Temp = styled(LevelItem)`
 	grid-area: Temp;
@@ -50,26 +50,23 @@ const Levels = () => {
 	const basementHumidity = useHassState('sensor.basement_humidity');
 
 	return (
-		<>
-			<Roof />
-			<Wrapper>
-				<Level>
-					<Label>2</Label>
-					<Temp>{upstairsTemp}°</Temp>
-					<Humidity>{upstairsHumidity}%</Humidity>
-				</Level>
-				<Level>
-					<Label>1</Label>
-					<Temp>{mainFloorTemp}°</Temp>
-					<Humidity>{mainFloorHumidity}%</Humidity>
-				</Level>
-				<Level>
-					<Label>B</Label>
-					<Temp>{basementTemp}°</Temp>
-					<Humidity>{basementHumidity}%</Humidity>
-				</Level>
-			</Wrapper>
-		</>
+		<Wrapper>
+			<Level>
+				<Label>2</Label>
+				<Temp>{upstairsTemp}°</Temp>
+				<Humidity>{upstairsHumidity}%</Humidity>
+			</Level>
+			<Level>
+				<Label>1</Label>
+				<Temp>{mainFloorTemp}°</Temp>
+				<Humidity>{mainFloorHumidity}%</Humidity>
+			</Level>
+			<Level>
+				<Label>B</Label>
+				<Temp>{basementTemp}°</Temp>
+				<Humidity>{basementHumidity}%</Humidity>
+			</Level>
+		</Wrapper>
 	);
 };
 
