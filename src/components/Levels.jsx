@@ -27,7 +27,7 @@ const LevelItem = styled.p`
 const Label = styled(LevelItem)`
 	grid-area: Label;
 	justify-self: center;
-	margin: -3px;
+	margin: -3px; // why?
 	padding: calc(1.5vh + 3px);
 	border-radius: 4vh 0 0 4vh;
 	font-weight: 900;

@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import useSubscribe from './hooks/useSubscribe';
+import useToasts from './hooks/useToasts';
 import useHassState from './hooks/useHassState';
 
 import Levels from './components/Levels';
@@ -123,6 +124,7 @@ const HotTubTemp = styled.div`
 
 const Dashboard = () => {
 	useSubscribe();
+	useToasts();
 
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
 	const indoorTemp = useHassState('sensor.indoor_temp');
