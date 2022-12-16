@@ -7,7 +7,7 @@ import Toast from './Toast';
 const SToasts = styled.div`
 	position: absolute;
 	width: 100%;
-	bottom: 12px;
+	bottom: 32px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
