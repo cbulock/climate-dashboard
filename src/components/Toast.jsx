@@ -16,8 +16,8 @@ const SToast = styled.div`
 	z-index: 100;
 	background: white;
 	padding: 16px;
-	border-radius: 8px
-    font-size: 1.3rem;
+	border-radius: 8px;
+	font-size: 1.3rem;
 	color: ${({ $color }) => $color};
 	animation: ${glow} 2s ease-in-out infinite;
 	transition: 2000ms opacity ease-in-out;
