@@ -2,13 +2,13 @@ import styled, { keyframes } from 'styled-components';
 
 const glow = keyframes`
   0% {
-    box-shadow: 0 0 50px 30px, inset 0 0 10px 3px;
+    box-shadow: 0 0 100px 60px, inset 0 0 10px 3px;
   }
   50% {
     box-shadow: 0 0 20px 15px, inset 0 0 5px 1px;
   }
   100% {
-    box-shadow: 0 0 50px 30px, inset 0 0 10px 3px;
+    box-shadow: 0 0 100px 60px, inset 0 0 10px 3px;
   }
 `;
 
