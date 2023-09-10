@@ -81,7 +81,7 @@ const Main = styled.main`
 		'Indoors HotTub'
 		'Levels Wind';
 	height: 100vh;
-	background: rgb(2, 204, 255);
+	background: black;
 	color: white;
 `;
 
@@ -140,7 +140,7 @@ const Dashboard = () => {
 	const indoorHumidity = useHassState('sensor.indoor_humidity');
 
 	const poolTemp = useHassState('sensor.pool_temp');
-	const poolPump = useHassState('sensor.pool_pump');
+	const poolPump = useHassState('switch.pool_pump');
 
 	const hotTubTemp = useHassState('sensor.hot_tub_temp');
 

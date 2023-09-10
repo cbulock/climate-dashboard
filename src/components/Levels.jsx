@@ -31,7 +31,7 @@ const Label = styled(LevelItem)`
 	padding: calc(1.5vh + 3px);
 	border-radius: 4vh 0 0 4vh;
 	font-weight: 900;
-	color: rgb(2, 204, 255);
+	color: black;
 	background: white;
 `;
 const Temp = styled(LevelItem)`

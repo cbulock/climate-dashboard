@@ -26,7 +26,7 @@ const Circle = styled.div`
 	height: 20vw;
 	width: 20vw;
 	border-radius: 50%;
-	background: rgb(2, 204, 255);
+	background: black;
 `;
 
 const CaretWrapper = styled.div`
