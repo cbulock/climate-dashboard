@@ -39,6 +39,21 @@ describe('useSubscribe', () => {
 		import.meta.env.VITE_HASS_TOKEN = originalEnv.VITE_HASS_TOKEN;
 	});
 
+	it('throws at render time when Home Assistant config is missing', () => {
+		delete import.meta.env.VITE_HASS_URL;
+		delete import.meta.env.VITE_HASS_TOKEN;
+
+		const setEntities = vi.fn();
+
+		expect(() =>
+			render(
+				<EntitiesContext.Provider value={{ entities: {}, setEntities }}>
+					<HookProbe />
+				</EntitiesContext.Provider>,
+			),
+		).toThrow('Missing Home Assistant configuration');
+	});
+
 	it('unsubscribes and closes the connection on unmount', async () => {
 		const setEntities = vi.fn();
 		const unsubscribe = vi.fn();

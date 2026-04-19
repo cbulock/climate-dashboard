@@ -11,9 +11,9 @@ import getHassConfig from '../lib/env';
 
 const useSubscribe = () => {
 	const { setEntities } = useContext(EntitiesContext);
+	const { url, token } = getHassConfig();
 
 	useEffect(() => {
-		const { url, token } = getHassConfig();
 		let connection;
 		let unsubscribe;
 		let isActive = true;
@@ -43,7 +43,7 @@ const useSubscribe = () => {
 			unsubscribe?.();
 			connection?.close();
 		};
-	}, [setEntities]);
+	}, [setEntities, url, token]);
 };
 
 export default useSubscribe;
