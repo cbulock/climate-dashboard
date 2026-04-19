@@ -1,8 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
 	faArrowUpFromWaterPump,
@@ -13,16 +10,10 @@ import {
 
 import useSubscribe from './hooks/useSubscribe';
 import useHassState from './hooks/useHassState';
+import isPoolSeason from './lib/poolSeason';
 
 import Levels from './components/Levels';
 import Wind from './components/Wind';
-
-dayjs.extend(isBetween);
-
-const now = dayjs();
-const thisSpring = dayjs().year(now.year()).month(4).date(15);
-const thisFall = dayjs().year(now.year()).month(8).date(15);
-const isSummer = dayjs(now).isBetween(thisSpring, thisFall);
 
 const pulse = keyframes`
 	0% {
@@ -133,6 +124,7 @@ const HotTubTemp = styled.div`
 
 const Dashboard = () => {
 	useSubscribe();
+	const showPool = isPoolSeason();
 
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
 	const indoorTemp = useHassState('sensor.indoor_temp');
@@ -162,7 +154,7 @@ const Dashboard = () => {
 					{indoorHumidity}%
 				</IndoorHumidity>
 			</Indoors>
-			{isSummer && (
+			{showPool && (
 				<Pool>
 					<PoolTemp>
 						<LargerIcon icon={faWaterLadder} />

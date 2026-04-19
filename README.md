@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# climate-dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A lightweight React dashboard for Home Assistant climate and alert data.
 
-## Available Scripts
+## Environment variables
 
-In the project directory, you can run:
+Set these before starting the app or building it:
 
-### `npm start`
+- `VITE_HASS_URL` - Home Assistant base URL
+- `VITE_HASS_TOKEN` - Home Assistant long-lived access token
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+For migration compatibility, Vite is also configured to accept the older `REACT_APP_HASS_URL` and `REACT_APP_HASS_TOKEN` names.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+For Docker builds, make the variables available in your shell before running `npm run docker-build`, or pass them explicitly with `docker build --build-arg ...`.
 
-### `npm test`
+## Scripts
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `npm start` or `npm run dev` - start the Vite dev server
+- `npm run build` - create the production bundle in `build/`
+- `npm run preview` - preview the production bundle locally
+- `npm run lint` - run ESLint across the app source
+- `npm run docker-build` - build the Nginx image using `VITE_HASS_URL` and `VITE_HASS_TOKEN` from your shell environment
+- `npm test` - run the Vitest suite once
+- `npm run test:watch` - run tests in watch mode
 
-### `npm run build`
+Run a single test file with:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm test -- src/components/Dashboard.test.jsx
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Architecture
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `src/App.jsx` composes the app shell, global styles, error boundary, entity provider, toast layer, and dashboard.
+- `src/hooks/useSubscribe.jsx` owns the Home Assistant websocket subscription and populates `EntitiesContext` with the latest entity map.
+- `src/hooks/useHassState.jsx` and `src/hooks/useToasts.jsx` are the main read APIs used by the UI.
+- `src/Dashboard.jsx`, `src/components/Levels.jsx`, `src/components/Wind.jsx`, and `src/components/Toasts.jsx` render the display using hard-coded Home Assistant entity IDs.
 
-### `npm run eject`
+## Deployment
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`npm run build` writes the static bundle to `build/`, and the Docker image serves that directory from Nginx using `buildconfig/nginx.conf`.

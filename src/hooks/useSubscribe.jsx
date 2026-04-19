@@ -7,24 +7,43 @@ import {
 } from 'home-assistant-js-websocket';
 
 import { EntitiesContext } from '../context/Entities';
+import getHassConfig from '../lib/env';
 
 const useSubscribe = () => {
 	const { setEntities } = useContext(EntitiesContext);
+	const { url, token } = getHassConfig();
 
 	useEffect(() => {
-		const subscribe = async () => {
-			const auth = createLongLivedTokenAuth(
-				// eslint-disable-next-line no-undef
-				process.env.REACT_APP_HASS_URL,
-				// eslint-disable-next-line no-undef
-				process.env.REACT_APP_HASS_TOKEN,
-			);
+		let connection;
+		let unsubscribe;
+		let isActive = true;
 
-			const connection = await createConnection({ auth });
-			subscribeEntities(connection, (e) => setEntities(e));
+		const subscribe = async () => {
+			const auth = createLongLivedTokenAuth(url, token);
+
+			const nextConnection = await createConnection({ auth });
+
+			if (!isActive) {
+				nextConnection.close();
+				return;
+			}
+
+			connection = nextConnection;
+			unsubscribe = subscribeEntities(connection, (entities) => {
+				if (isActive) {
+					setEntities(entities);
+				}
+			});
 		};
+
 		subscribe();
-	}, []);
+
+		return () => {
+			isActive = false;
+			unsubscribe?.();
+			connection?.close();
+		};
+	}, [setEntities, url, token]);
 };
 
 export default useSubscribe;
