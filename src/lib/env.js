@@ -3,8 +3,8 @@ const getImportMetaEnv = () =>
 
 const getHassConfig = () => {
 	const env = getImportMetaEnv();
-	const url = env.VITE_HASS_URL ?? env.REACT_APP_HASS_URL;
-	const token = env.VITE_HASS_TOKEN ?? env.REACT_APP_HASS_TOKEN;
+	const url = env.VITE_HASS_URL;
+	const token = env.VITE_HASS_TOKEN;
 
 	if (!url || !token) {
 		throw new Error(
