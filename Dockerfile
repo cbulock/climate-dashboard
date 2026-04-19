@@ -1,12 +1,15 @@
 
 # build environment
-FROM node:13.12.0-alpine as build
+FROM node:22-alpine AS build
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
+ARG VITE_HASS_URL
+ARG VITE_HASS_TOKEN
+ENV VITE_HASS_URL=$VITE_HASS_URL
+ENV VITE_HASS_TOKEN=$VITE_HASS_TOKEN
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm ci
-RUN npm install react-scripts@5.0.1
 COPY . ./
 RUN npm run build
 
