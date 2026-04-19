@@ -1,33 +1,14 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-	faArrowUpFromWaterPump,
-	faDroplet,
-	faHotTubPerson,
-	faWaterLadder,
-} from '@fortawesome/free-solid-svg-icons';
+import { faDroplet, faHotTubPerson } from '@fortawesome/free-solid-svg-icons';
 
 import useSubscribe from './hooks/useSubscribe';
 import useHassState from './hooks/useHassState';
-import isPoolSeason from './lib/poolSeason';
+import { isHotTubEnabled } from './lib/env';
 
 import Levels from './components/Levels';
 import Wind from './components/Wind';
-
-const pulse = keyframes`
-	0% {
-		opacity: 1;
-	}
-
-	70% {
-		opacity: 0.5;
-	}
-
-	100% {
-		opacity: 1;
-	}
-`;
 
 const HumidityIcon = styled(FontAwesomeIcon)`
 	padding-right: 1vw;
@@ -35,13 +16,6 @@ const HumidityIcon = styled(FontAwesomeIcon)`
 
 const LargerIcon = styled(FontAwesomeIcon)`
 	padding-right: 0.8vw;
-`;
-
-const PumpIcon = styled(FontAwesomeIcon)`
-	font-size: 3vw;
-	justify-self: end;
-	padding-right: 3vw;
-	animation: ${pulse} 2s infinite;
 `;
 
 const TempContainer = styled.div`
@@ -67,10 +41,10 @@ const Main = styled.main`
 	display: grid;
 	grid-template-columns: 50% 50%;
 	grid-template-rows: auto;
-	grid-template-areas:
-		'Outdoors Pool'
-		'Indoors HotTub'
-		'Levels Wind';
+	grid-template-areas: ${({ $showHotTub }) =>
+		$showHotTub
+			? "'Outdoors HotTub' 'Indoors Wind' 'Levels Wind'"
+			: "'Outdoors Wind' 'Indoors Wind' 'Levels Wind'"};
 	height: 100vh;
 	background: black;
 	color: white;
@@ -104,16 +78,6 @@ const IndoorLabel = styled(LocationLabel)`
 	font-size: 3.5vw;
 `;
 
-const Pool = styled.div`
-	width: fit-content;
-	grid-area: Pool;
-	display: grid;
-`;
-const PoolTemp = styled.div`
-	font-size: 12vw;
-	font-weight: 900;
-`;
-
 const HotTub = styled.div`
 	grid-area: HotTub;
 `;
@@ -124,20 +88,17 @@ const HotTubTemp = styled.div`
 
 const Dashboard = () => {
 	useSubscribe();
-	const showPool = isPoolSeason();
+	const showHotTub = isHotTubEnabled();
 
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
 	const indoorTemp = useHassState('sensor.indoor_temp');
 	const outdoorHumidity = useHassState('sensor.outdoor_humidity');
 	const indoorHumidity = useHassState('sensor.indoor_humidity');
 
-	const poolTemp = useHassState('sensor.pool_temp');
-	const poolPump = useHassState('switch.pool_pump');
-
 	const hotTubTemp = useHassState('sensor.hot_tub_temp');
 
 	return (
-		<Main>
+		<Main $showHotTub={showHotTub}>
 			<Outdoors>
 				<OutdoorTemp>{outdoorTemp}°</OutdoorTemp>
 				<OutdoorLabel>Outdoors</OutdoorLabel>
@@ -154,22 +115,14 @@ const Dashboard = () => {
 					{indoorHumidity}%
 				</IndoorHumidity>
 			</Indoors>
-			{showPool && (
-				<Pool>
-					<PoolTemp>
-						<LargerIcon icon={faWaterLadder} />
-						{poolTemp}°
-					</PoolTemp>
-					{poolPump === 'on' && <PumpIcon icon={faArrowUpFromWaterPump} />}
-				</Pool>
+			{showHotTub && (
+				<HotTub>
+					<HotTubTemp>
+						<LargerIcon icon={faHotTubPerson} />
+						{hotTubTemp}°
+					</HotTubTemp>
+				</HotTub>
 			)}
-
-			<HotTub>
-				<HotTubTemp>
-					<LargerIcon icon={faHotTubPerson} />
-					{hotTubTemp}°
-				</HotTubTemp>
-			</HotTub>
 			<Levels />
 			<Wind />
 		</Main>

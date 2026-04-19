@@ -8,8 +8,7 @@ Set these before starting the app or building it:
 
 - `VITE_HASS_URL` - Home Assistant base URL
 - `VITE_HASS_TOKEN` - Home Assistant long-lived access token
-
-For migration compatibility, Vite is also configured to accept the older `REACT_APP_HASS_URL` and `REACT_APP_HASS_TOKEN` names.
+- `VITE_ENABLE_HOT_TUB` - optional flag to show the hot tub panel (`true`, `1`, `yes`, or `on`). Defaults to hidden.
 
 For Docker builds, make the variables available in your shell before running `npm run docker-build`, or pass them explicitly with `docker build --build-arg ...`.
 
@@ -35,6 +34,7 @@ npm test -- src/components/Dashboard.test.jsx
 - `src/hooks/useSubscribe.jsx` owns the Home Assistant websocket subscription and populates `EntitiesContext` with the latest entity map.
 - `src/hooks/useHassState.jsx` and `src/hooks/useToasts.jsx` are the main read APIs used by the UI.
 - `src/Dashboard.jsx`, `src/components/Levels.jsx`, `src/components/Wind.jsx`, and `src/components/Toasts.jsx` render the display using hard-coded Home Assistant entity IDs.
+- The pool panel has been removed from the UI. The hot tub panel remains implemented but is hidden unless `VITE_ENABLE_HOT_TUB` is enabled.
 
 ## Deployment
 
