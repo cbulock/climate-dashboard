@@ -11,10 +11,7 @@ const Wrapper = styled(Panel).attrs({
 	'aria-labelledby': 'wind-heading',
 })`
 	grid-area: Wind;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		min-height: 16rem;
-	}
+	min-height: 16rem;
 `;
 
 const CircleWrapper = styled.div`
@@ -22,19 +19,9 @@ const CircleWrapper = styled.div`
 	display: grid;
 	place-items: center;
 	margin: 0 auto;
-	width: clamp(12rem, 22vw, 18rem);
-	height: clamp(12rem, 22vw, 18rem);
-
-	@media (min-width: 900px) and (max-width: 1400px) and (min-aspect-ratio: 4/3) {
-		width: min(32vh, 17rem);
-		height: min(32vh, 17rem);
-	}
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		width: min(100%, 12.5rem);
-		aspect-ratio: 1;
-		height: auto;
-	}
+	width: min(100%, 12.5rem);
+	aspect-ratio: 1;
+	height: auto;
 `;
 
 const DialFace = styled.div`
@@ -78,30 +65,21 @@ const Speed = styled.div`
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-weight: 900;
-	font-size: clamp(3rem, 9vw, 6rem);
+	font-size: clamp(2.8rem, 9vw, 4rem);
 	line-height: 0.95;
 	z-index: 2;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		font-size: clamp(2.8rem, 9vw, 4rem);
-	}
 `;
 const SpeedLabel = styled.p`
 	position: absolute;
-	top: calc(50% + 3rem);
+	top: calc(50% + 2.15rem);
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size: 0.82rem;
+	font-size: 0.68rem;
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
 	color: var(--text-muted);
 	margin: 0;
 	z-index: 2;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		top: calc(50% + 2.15rem);
-		font-size: 0.68rem;
-	}
 `;
 
 const DirectionTicks = styled.div`
@@ -163,7 +141,7 @@ const DirectionLabel = styled.p`
 	min-height: 2rem;
 	padding: 0 0.3rem;
 	border-radius: 999px;
-	font-size: 1rem;
+	font-size: 0.82rem;
 	font-weight: 800;
 	letter-spacing: 0.08em;
 	color: rgba(248, 250, 252, 0.72);
@@ -173,59 +151,36 @@ const DirectionLabel = styled.p`
 		0 0 18px rgba(2, 6, 23, 0.45);
 	text-shadow: 0 0 18px rgba(2, 6, 23, 0.75);
 	z-index: 3;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		min-width: 1.7rem;
-		min-height: 1.7rem;
-		font-size: 0.82rem;
-	}
+	min-width: 1.7rem;
+	min-height: 1.7rem;
 `;
 
 const North = styled(DirectionLabel)`
-	top: 0.85rem;
+	top: 0.55rem;
 	left: 50%;
 	transform: translateX(-50%);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		top: 0.55rem;
-	}
 `;
 const South = styled(DirectionLabel)`
-	bottom: 0.85rem;
+	bottom: 0.55rem;
 	left: 50%;
 	transform: translateX(-50%);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		bottom: 0.55rem;
-	}
 `;
 const East = styled(DirectionLabel)`
 	top: 50%;
-	right: 0.85rem;
+	right: 0.55rem;
 	transform: translateY(-50%);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		right: 0.55rem;
-	}
 `;
 const West = styled(DirectionLabel)`
 	top: 50%;
-	left: 0.85rem;
+	left: 0.55rem;
 	transform: translateY(-50%);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		left: 0.55rem;
-	}
 `;
 
 const WindBody = styled.div`
 	display: flex;
 	justify-content: center;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		flex: 1;
-		align-items: center;
-	}
+	flex: 1;
+	align-items: center;
 `;
 
 const Wind = () => {

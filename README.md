@@ -1,6 +1,6 @@
 # climate-dashboard
 
-A lightweight React dashboard for Home Assistant climate and alert data, designed primarily for a wall-mounted Amazon Fire 7 tablet (7th/9th gen) at a 600x1024 portrait viewport.
+A lightweight React dashboard for Home Assistant climate and alert data, intentionally tuned for a wall-mounted Amazon Fire 7 tablet (7th/9th gen) at a 600x1024 portrait viewport.
 
 ## Environment variables
 

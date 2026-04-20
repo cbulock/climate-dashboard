@@ -25,7 +25,7 @@
 
 - Keep Home Assistant access centralized. New UI pieces should usually consume `useHassState` or a small hook built on `EntitiesContext` instead of talking to `home-assistant-js-websocket` directly from components.
 - Entity IDs are part of the app contract and are hard-coded in components (`sensor.outdoor_temp`, `sensor.wind_avg`, `switch.alerts`, etc.). When changing UI behavior, verify the exact Home Assistant entity name and whether it exposes plain `state` or nested `attributes.data`.
-- The primary display target is a wall-mounted Amazon Fire 7 tablet (7th/9th gen) at roughly 600x1024 CSS pixels with touch input and a mobile Android user agent. Favor a portrait kiosk layout that keeps the full dashboard visible without scrolling.
+- The primary display target is a wall-mounted Amazon Fire 7 tablet (7th/9th gen) at roughly 600x1024 CSS pixels with touch input and a mobile Android user agent. Treat the dashboard as a single fixed portrait kiosk layout for that device rather than a generally responsive app.
 - Runtime config uses Vite env names only: `VITE_HASS_URL`, `VITE_HASS_TOKEN`, and optional `VITE_ENABLE_HOT_TUB`.
 - Docker images stay generic and rely on `/runtime-config.js` generated from container env vars at startup, while local Vite development can still use `import.meta.env`.
 - GitHub Actions publishes the container to `ghcr.io/cbulock/climate-dashboard` from `.github/workflows/docker-publish.yml`; keep that workflow aligned with any future image naming or runtime config changes.

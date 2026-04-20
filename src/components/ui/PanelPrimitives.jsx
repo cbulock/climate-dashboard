@@ -1,3 +1,6 @@
+import { useLayoutEffect, useRef, useState } from 'react';
+
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 export const Panel = styled.section`
@@ -19,14 +22,9 @@ export const PanelInner = styled.div`
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-md);
-	padding: var(--space-xl);
+	gap: 0.75rem;
+	padding: 1rem;
 	height: 100%;
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		gap: 0.75rem;
-		padding: 1rem;
-	}
 `;
 
 export const PanelEyebrow = styled.p`
@@ -40,13 +38,9 @@ export const PanelEyebrow = styled.p`
 
 export const PanelTitle = styled.h2`
 	margin: 0;
-	font-size: clamp(1rem, 1.2vw, 1.25rem);
+	font-size: 0.95rem;
 	font-weight: 700;
 	color: var(--text-primary);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		font-size: 0.95rem;
-	}
 `;
 
 export const HeroValue = styled.div`
@@ -59,6 +53,126 @@ export const HeroValue = styled.div`
 	letter-spacing: -0.06em;
 	color: var(--text-primary);
 `;
+
+const AutoFitValueFrame = styled.div`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+`;
+
+const AutoFitValueText = styled.span`
+	display: inline-block;
+	white-space: nowrap;
+	font-weight: 900;
+	line-height: ${({ $lineHeight }) => $lineHeight};
+	letter-spacing: -0.06em;
+	color: var(--text-primary);
+	font-size: ${({ $fontSize }) => `${$fontSize}px`};
+`;
+
+export const AutoFitHeroValue = ({
+	children,
+	className,
+	lineHeight = 0.78,
+	maxFontSize = 180,
+	minFontSize = 48,
+}) => {
+	const frameRef = useRef(null);
+	const textRef = useRef(null);
+	const [fontSize, setFontSize] = useState(maxFontSize);
+
+	useLayoutEffect(() => {
+		const frame = frameRef.current;
+		const text = textRef.current;
+
+		if (!frame || !text) {
+			return undefined;
+		}
+
+		let animationFrameId;
+
+		const fitText = () => {
+			const availableWidth = frame.clientWidth;
+			const availableHeight = frame.clientHeight;
+
+			if (!availableWidth || !availableHeight) {
+				return;
+			}
+
+			let low = minFontSize;
+			let high = maxFontSize;
+			let best = minFontSize;
+
+			while (low <= high) {
+				const mid = Math.floor((low + high) / 2);
+
+				text.style.fontSize = `${mid}px`;
+
+				const fits =
+					text.scrollWidth <= availableWidth &&
+					text.scrollHeight <= availableHeight;
+
+				if (fits) {
+					best = mid;
+					low = mid + 1;
+				} else {
+					high = mid - 1;
+				}
+			}
+
+			text.style.fontSize = '';
+			setFontSize((current) => (current === best ? current : best));
+		};
+
+		const scheduleFit = () => {
+			cancelAnimationFrame(animationFrameId);
+			animationFrameId = requestAnimationFrame(fitText);
+		};
+
+		scheduleFit();
+
+		if (typeof ResizeObserver === 'undefined') {
+			return () => cancelAnimationFrame(animationFrameId);
+		}
+
+		const observer = new ResizeObserver(scheduleFit);
+		observer.observe(frame);
+
+		return () => {
+			cancelAnimationFrame(animationFrameId);
+			observer.disconnect();
+		};
+	}, [children, maxFontSize, minFontSize]);
+
+	return (
+		<AutoFitValueFrame ref={frameRef} className={className}>
+			<AutoFitValueText
+				ref={textRef}
+				$fontSize={fontSize}
+				$lineHeight={lineHeight}
+			>
+				{children}
+			</AutoFitValueText>
+		</AutoFitValueFrame>
+	);
+};
+
+AutoFitHeroValue.propTypes = {
+	children: PropTypes.node.isRequired,
+	className: PropTypes.string,
+	lineHeight: PropTypes.number,
+	maxFontSize: PropTypes.number,
+	minFontSize: PropTypes.number,
+};
+
+AutoFitHeroValue.defaultProps = {
+	className: undefined,
+	lineHeight: 0.78,
+	maxFontSize: 180,
+	minFontSize: 48,
+};
 
 export const MetricRow = styled.div`
 	display: flex;
@@ -79,15 +193,10 @@ export const SubtleText = styled.p`
 export const AccentBadge = styled.span`
 	display: inline-flex;
 	align-items: center;
-	gap: 0.45rem;
-	padding: 0.5rem 0.8rem;
+	gap: 0.35rem;
+	padding: 0.4rem 0.65rem;
 	border-radius: 999px;
+	font-size: 0.88rem;
 	background: rgba(255, 255, 255, 0.06);
 	border: 1px solid rgba(255, 255, 255, 0.08);
-
-	@media (max-width: 700px) and (min-height: 900px) {
-		gap: 0.35rem;
-		padding: 0.4rem 0.65rem;
-		font-size: 0.88rem;
-	}
 `;
