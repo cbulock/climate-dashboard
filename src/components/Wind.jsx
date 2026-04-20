@@ -52,7 +52,7 @@ const CaretWrapper = styled.div`
 	height: 100%;
 	transform: translate(-50%) rotate(${({ $direction }) => $direction}deg);
 	transition: transform 1s;
-	z-index: 2;
+	z-index: 4;
 
 	@media (prefers-reduced-motion: reduce) {
 		transition: none;
