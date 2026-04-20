@@ -42,9 +42,12 @@ const Main = styled.main`
 		$showHotTub
 			? "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind' 'HotTub HotTub'"
 			: "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind'"};
-	grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) minmax(16rem, auto);
+	grid-template-rows: ${({ $showHotTub }) =>
+		$showHotTub
+			? 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr)'
+			: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr)'};
 	gap: 0.7rem;
-	width: min(100%, 600px);
+	width: 100%;
 	min-height: 100dvh;
 	margin: 0 auto;
 	padding: 0.7rem;
