@@ -19,8 +19,14 @@ import {
 	SubtleText,
 } from './components/ui/PanelPrimitives';
 
+const HumidityBadge = styled(AccentBadge)`
+	font-size: 1.5rem;
+	font-weight: 700;
+	padding: 0.5rem 0.9rem;
+`;
+
 const HumidityIcon = styled(FontAwesomeIcon)`
-	font-size: 0.95rem;
+	font-size: 1.2rem;
 	color: var(--accent-cyan);
 `;
 
@@ -113,10 +119,10 @@ const Dashboard = () => {
 								Outdoor climate
 							</PanelTitle>
 						</ClimateMeta>
-						<AccentBadge>
+						<HumidityBadge>
 							<HumidityIcon icon={faDroplet} />
 							{outdoorHumidity}%
-						</AccentBadge>
+						</HumidityBadge>
 					</ClimateHeader>
 					<HeroMetric maxFontSize={320} minFontSize={96}>
 						{outdoorTemp}°
@@ -131,10 +137,10 @@ const Dashboard = () => {
 								Indoor climate
 							</PanelTitle>
 						</ClimateMeta>
-						<AccentBadge>
+						<HumidityBadge>
 							<HumidityIcon icon={faDroplet} />
 							{indoorHumidity}%
-						</AccentBadge>
+						</HumidityBadge>
 					</ClimateHeader>
 					<HeroMetric maxFontSize={280} minFontSize={88}>
 						{indoorTemp}°
