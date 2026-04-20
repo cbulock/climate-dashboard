@@ -5,14 +5,15 @@ import useToasts from '../hooks/useToasts';
 import Toast from './Toast';
 
 const SToasts = styled.div`
-	position: absolute;
-	width: 100%;
-	bottom: 32px;
+	position: fixed;
+	right: clamp(1rem, 2vw, 2rem);
+	top: clamp(1rem, 2vw, 2rem);
+	width: min(28rem, calc(100vw - 2rem));
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 48px;
+	align-items: stretch;
+	gap: 0.85rem;
+	z-index: 100;
 `;
 
 const Toasts = () => {

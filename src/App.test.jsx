@@ -10,7 +10,12 @@ vi.mock('./hooks/useSubscribe', () => ({
 test('renders the dashboard shell labels', () => {
 	render(<App />);
 
-	expect(screen.getByText('Outdoors')).toBeInTheDocument();
-	expect(screen.getByText('Indoors')).toBeInTheDocument();
+	expect(
+		screen.getByRole('heading', { name: 'Outdoor climate' }),
+	).toBeInTheDocument();
+	expect(
+		screen.getByRole('heading', { name: 'Indoor climate' }),
+	).toBeInTheDocument();
+	expect(screen.getByRole('heading', { name: 'Wind' })).toBeInTheDocument();
 	expect(screen.getByText('MPH')).toBeInTheDocument();
 });

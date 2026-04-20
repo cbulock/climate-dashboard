@@ -9,7 +9,7 @@
 - `npm test` runs the Vitest suite once.
 - `npm run test:watch` runs Vitest in watch mode.
 - `npm test -- src/components/Dashboard.test.jsx` runs a single test file.
-- `npm run docker-build` builds the production image and expects `VITE_HASS_URL` / `VITE_HASS_TOKEN` to already be present in the shell environment.
+- `npm run docker-build` builds the production image without baking in Home Assistant config; pass env vars at container runtime instead.
 
 ## High-level architecture
 
@@ -25,8 +25,10 @@
 
 - Keep Home Assistant access centralized. New UI pieces should usually consume `useHassState` or a small hook built on `EntitiesContext` instead of talking to `home-assistant-js-websocket` directly from components.
 - Entity IDs are part of the app contract and are hard-coded in components (`sensor.outdoor_temp`, `sensor.wind_avg`, `switch.alerts`, etc.). When changing UI behavior, verify the exact Home Assistant entity name and whether it exposes plain `state` or nested `attributes.data`.
+- The primary display target is a wall-mounted Amazon Fire 7 tablet (7th/9th gen) at roughly 600x1024 CSS pixels with touch input and a mobile Android user agent. Favor a portrait kiosk layout that keeps the full dashboard visible without scrolling.
 - Runtime config uses Vite env names only: `VITE_HASS_URL`, `VITE_HASS_TOKEN`, and optional `VITE_ENABLE_HOT_TUB`.
-- Docker builds inject `VITE_HASS_URL` and `VITE_HASS_TOKEN` as build args, so browser config is still determined at image build time rather than runtime.
+- Docker images stay generic and rely on `/runtime-config.js` generated from container env vars at startup, while local Vite development can still use `import.meta.env`.
+- GitHub Actions publishes the container to `ghcr.io/cbulock/climate-dashboard` from `.github/workflows/docker-publish.yml`; keep that workflow aligned with any future image naming or runtime config changes.
 - Styling is colocated with each component via `styled-components`; there are no separate CSS files for app components.
 - ESLint enforces named components as arrow functions and tab-indented JSX/props (`react/function-component-definition`, `react/jsx-indent`, `react/jsx-indent-props` in `.eslintrc.json`).
 - The pool panel is intentionally removed from the UI. The hot tub panel is feature-flagged off by default, so dashboard changes should not assume it is visible.

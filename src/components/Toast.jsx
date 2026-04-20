@@ -1,43 +1,63 @@
 import styled, { keyframes } from 'styled-components';
 
 const glow = keyframes`
-  0% {
-    box-shadow: 0 0 100px 60px, inset 0 0 10px 3px;
-  }
-  50% {
-    box-shadow: 0 0 20px 15px, inset 0 0 5px 1px;
-  }
-  100% {
-    box-shadow: 0 0 100px 60px, inset 0 0 10px 3px;
-  }
+	0% {
+		transform: translateY(0);
+		box-shadow: 0 14px 34px rgba(2, 6, 23, 0.28);
+	}
+	50% {
+		transform: translateY(-2px);
+		box-shadow: 0 18px 40px rgba(2, 6, 23, 0.36);
+	}
+	100% {
+		transform: translateY(0);
+		box-shadow: 0 14px 34px rgba(2, 6, 23, 0.28);
+	}
 `;
 
 const SToast = styled.div`
 	z-index: 100;
-	background: white;
-	padding: 16px;
-	border-radius: 8px;
-	font-size: 1.3rem;
-	color: ${({ $color }) => $color};
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+	min-width: min(28rem, 100%);
+	padding: 1rem 1.1rem;
+	border-radius: 1rem;
+	background: rgba(15, 23, 42, 0.88);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	font-size: 1rem;
+	color: var(--text-primary);
 	animation: ${glow} 2s ease-in-out infinite;
-	transition: 2000ms opacity ease-in-out;
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
+`;
+
+const Accent = styled.div`
+	flex: 0 0 0.35rem;
+	align-self: stretch;
+	border-radius: 999px;
+	background: ${({ $color }) => $color};
 `;
 
 const Description = styled.div`
 	font-weight: 800;
-	color: #181818;
+	color: var(--text-primary);
 `;
 
 // eslint-disable-next-line react/prop-types
 const Toast = ({ toast }) => {
 	// eslint-disable-next-line camelcase
-	const { description, rgb_color } = toast || {};
+	const { description, rgb_color: rgbColor } = toast || {};
+	const accentColor =
+		Array.isArray(rgbColor) && rgbColor.length === 3
+			? `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`
+			: 'var(--accent-amber)';
 
 	return (
-		<SToast
-			// eslint-disable-next-line camelcase
-			$color={`rgb(${rgb_color[0]}, ${rgb_color[1]}, ${rgb_color[2]})`}
-		>
+		<SToast role="status" aria-live="polite">
+			<Accent $color={accentColor} />
 			<Description>{description}</Description>
 		</SToast>
 	);

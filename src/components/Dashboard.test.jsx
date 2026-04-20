@@ -36,11 +36,22 @@ describe('Dashboard', () => {
 	it('renders the core climate dashboard without pool or hot tub panels by default', () => {
 		renderWithEntities(<Dashboard />, { entities });
 
-		expect(screen.getByText('Outdoors')).toBeInTheDocument();
-		expect(screen.getByText('Indoors')).toBeInTheDocument();
+		expect(
+			screen.getByRole('heading', { name: 'Outdoor climate' }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('region', { name: 'Outdoor climate' }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole('heading', { name: 'Indoor climate' }),
+		).toBeInTheDocument();
 		expect(screen.getByText(/58/)).toBeInTheDocument();
 		expect(screen.getByText(/71/)).toBeInTheDocument();
 		expect(screen.queryByText(/101/)).not.toBeInTheDocument();
+		expect(
+			screen.getByRole('heading', { name: 'Home levels' }),
+		).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Wind' })).toBeInTheDocument();
 		expect(screen.getByText('MPH')).toBeInTheDocument();
 	});
 

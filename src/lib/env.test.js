@@ -2,10 +2,16 @@ import { describe, expect, it, afterEach } from 'vitest';
 
 import getHassConfig, { isHotTubEnabled } from './env';
 
+const runtimeConfigKey = '__CLIMATE_DASHBOARD_CONFIG__';
+const originalRuntimeEnv = window[runtimeConfigKey];
 const originalEnv = {
 	VITE_HASS_URL: import.meta.env.VITE_HASS_URL,
 	VITE_HASS_TOKEN: import.meta.env.VITE_HASS_TOKEN,
 	VITE_ENABLE_HOT_TUB: import.meta.env.VITE_ENABLE_HOT_TUB,
+};
+
+const restoreRuntimeEnv = () => {
+	window[runtimeConfigKey] = originalRuntimeEnv;
 };
 
 const restoreEnv = () => {
@@ -15,10 +21,25 @@ const restoreEnv = () => {
 };
 
 afterEach(() => {
+	restoreRuntimeEnv();
 	restoreEnv();
 });
 
 describe('getHassConfig', () => {
+	it('returns config from runtime environment variables when present', () => {
+		window[runtimeConfigKey] = {
+			VITE_HASS_URL: 'https://runtime.example',
+			VITE_HASS_TOKEN: 'runtime-token',
+		};
+		import.meta.env.VITE_HASS_URL = 'https://vite.example';
+		import.meta.env.VITE_HASS_TOKEN = 'vite-token';
+
+		expect(getHassConfig()).toEqual({
+			url: 'https://runtime.example',
+			token: 'runtime-token',
+		});
+	});
+
 	it('returns config from VITE environment variables', () => {
 		import.meta.env.VITE_HASS_URL = 'https://vite.example';
 		import.meta.env.VITE_HASS_TOKEN = 'vite-token';
@@ -40,6 +61,15 @@ describe('getHassConfig', () => {
 });
 
 describe('isHotTubEnabled', () => {
+	it('uses the runtime flag when present', () => {
+		window[runtimeConfigKey] = {
+			VITE_ENABLE_HOT_TUB: 'true',
+		};
+		import.meta.env.VITE_ENABLE_HOT_TUB = 'false';
+
+		expect(isHotTubEnabled()).toBe(true);
+	});
+
 	it('defaults to false when the flag is missing', () => {
 		delete import.meta.env.VITE_ENABLE_HOT_TUB;
 

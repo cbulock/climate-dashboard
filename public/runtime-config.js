@@ -1,0 +1,1 @@
+window.__CLIMATE_DASHBOARD_CONFIG__ = window.__CLIMATE_DASHBOARD_CONFIG__ || {};

@@ -29,5 +29,20 @@ describe('Toasts', () => {
 
 		expect(screen.getByText('Freeze warning')).toBeInTheDocument();
 		expect(screen.getByText('High wind alert')).toBeInTheDocument();
+		expect(screen.getAllByRole('status')).toHaveLength(2);
+	});
+
+	it('renders alerts even when rgb_color is missing', () => {
+		renderWithEntities(<Toasts />, {
+			entities: {
+				'switch.alerts': {
+					attributes: {
+						data: [{ name: 'plain-alert', description: 'Plain alert' }],
+					},
+				},
+			},
+		});
+
+		expect(screen.getByText('Plain alert')).toBeInTheDocument();
 	});
 });

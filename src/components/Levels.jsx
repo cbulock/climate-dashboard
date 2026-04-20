@@ -1,44 +1,86 @@
 import styled from 'styled-components';
 
 import useHassState from '../hooks/useHassState';
+import { Panel, PanelInner, PanelTitle } from './ui/PanelPrimitives';
 
-const Wrapper = styled.div`
+const Wrapper = styled(Panel).attrs({
+	role: 'region',
+	'aria-labelledby': 'levels-heading',
+})`
 	grid-area: Levels;
-	display: flex;
-	flex-direction: column;
 `;
 
 const Level = styled.div`
 	display: grid;
-	border: 3px solid white;
-	border-radius: 4vh;
-	margin: 1vh;
-	grid-template-columns: 3vh auto auto;
-	grid-template-areas: 'Label Temp Humidity';
-	gap: 2vh;
+	grid-template-columns: minmax(2.25rem, 3rem) minmax(0, 1fr) auto;
+	align-items: center;
+	gap: var(--space-md);
+	padding: var(--space-md);
+	border-radius: var(--radius-lg);
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.06);
+
+	@media (max-width: 700px) and (min-height: 900px) {
+		grid-template-columns: 1fr;
+		justify-items: center;
+		gap: 0.35rem;
+		padding: 0.7rem 0.5rem;
+		text-align: center;
+	}
 `;
 
-const LevelItem = styled.p`
-	font-size: 3vh;
-	padding: 1.5vh;
+const LevelsList = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+
+	@media (min-width: 900px) and (max-width: 1400px) and (min-aspect-ratio: 4/3) {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@media (max-width: 700px) and (min-height: 900px) {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 0.55rem;
+	}
+`;
+
+const LevelItem = styled.div`
 	margin: 0;
+	font-size: clamp(1rem, 2.2vw, 1.15rem);
+
+	@media (max-width: 700px) and (min-height: 900px) {
+		font-size: 0.92rem;
+	}
 `;
 
 const Label = styled(LevelItem)`
-	grid-area: Label;
-	justify-self: center;
-	margin: -3px; // why?
-	padding: calc(1.5vh + 3px);
-	border-radius: 4vh 0 0 4vh;
+	display: grid;
+	place-items: center;
+	min-height: 2.75rem;
+	border-radius: 0.95rem;
 	font-weight: 900;
-	color: black;
-	background: white;
+	color: var(--bg-base);
+	background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+
+	@media (max-width: 700px) and (min-height: 900px) {
+		min-width: 2rem;
+		min-height: 2rem;
+		padding: 0 0.45rem;
+	}
 `;
 const Temp = styled(LevelItem)`
-	grid-area: Temp;
+	font-weight: 700;
+	color: var(--text-primary);
 `;
 const Humidity = styled(LevelItem)`
-	grid-area: Humidity;
+	justify-self: end;
+	color: var(--text-secondary);
+
+	@media (max-width: 700px) and (min-height: 900px) {
+		justify-self: center;
+	}
 `;
 
 const Levels = () => {
@@ -51,21 +93,28 @@ const Levels = () => {
 
 	return (
 		<Wrapper>
-			<Level>
-				<Label>2</Label>
-				<Temp>{upstairsTemp}°</Temp>
-				<Humidity>{upstairsHumidity}%</Humidity>
-			</Level>
-			<Level>
-				<Label>1</Label>
-				<Temp>{mainFloorTemp}°</Temp>
-				<Humidity>{mainFloorHumidity}%</Humidity>
-			</Level>
-			<Level>
-				<Label>B</Label>
-				<Temp>{basementTemp}°</Temp>
-				<Humidity>{basementHumidity}%</Humidity>
-			</Level>
+			<PanelInner>
+				<div>
+					<PanelTitle id="levels-heading">Home levels</PanelTitle>
+				</div>
+				<LevelsList>
+					<Level>
+						<Label>B</Label>
+						<Temp>{basementTemp}°</Temp>
+						<Humidity>{basementHumidity}%</Humidity>
+					</Level>
+					<Level>
+						<Label>1</Label>
+						<Temp>{mainFloorTemp}°</Temp>
+						<Humidity>{mainFloorHumidity}%</Humidity>
+					</Level>
+					<Level>
+						<Label>2</Label>
+						<Temp>{upstairsTemp}°</Temp>
+						<Humidity>{upstairsHumidity}%</Humidity>
+					</Level>
+				</LevelsList>
+			</PanelInner>
 		</Wrapper>
 	);
 };
