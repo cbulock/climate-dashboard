@@ -4,7 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 import useHassState from '../hooks/useHassState';
-import { Panel, PanelInner, PanelTitle } from './ui/PanelPrimitives';
+import {
+	AutoFitHeroValue,
+	Panel,
+	PanelInner,
+	PanelTitle,
+} from './ui/PanelPrimitives';
 
 const Wrapper = styled(Panel).attrs({
 	role: 'region',
@@ -19,7 +24,8 @@ const CircleWrapper = styled.div`
 	display: grid;
 	place-items: center;
 	margin: 0 auto;
-	width: min(100%, 12.5rem);
+	width: 100%;
+	max-width: none;
 	aspect-ratio: 1;
 	height: auto;
 `;
@@ -59,27 +65,35 @@ const CaretWrapper = styled.div`
 	}
 `;
 
-const Speed = styled.div`
+const CenterReadout = styled.div`
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-weight: 900;
-	font-size: clamp(2.8rem, 9vw, 4rem);
-	line-height: 0.95;
+	width: 52%;
+	height: 42%;
 	z-index: 2;
 `;
+
+const Speed = styled(AutoFitHeroValue)`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 78%;
+`;
+
 const SpeedLabel = styled.p`
 	position: absolute;
-	top: calc(50% + 2.15rem);
+	bottom: 0;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translateX(-50%);
 	font-size: 0.68rem;
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
 	color: var(--text-muted);
 	margin: 0;
-	z-index: 2;
+	line-height: 1;
 `;
 
 const DirectionTicks = styled.div`
@@ -181,6 +195,7 @@ const WindBody = styled.div`
 	justify-content: center;
 	flex: 1;
 	align-items: center;
+	min-height: 0;
 `;
 
 const Wind = () => {
@@ -211,8 +226,12 @@ const Wind = () => {
 							<CaretWrapper $direction={direction}>
 								<Caret icon={faCaretUp} />
 							</CaretWrapper>
-							<Speed>{speed}</Speed>
-							<SpeedLabel>MPH</SpeedLabel>
+							<CenterReadout>
+								<Speed maxFontSize={128} minFontSize={28} lineHeight={0.88}>
+									{speed}
+								</Speed>
+								<SpeedLabel>MPH</SpeedLabel>
+							</CenterReadout>
 						</DialFace>
 					</CircleWrapper>
 				</WindBody>

@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDroplet } from '@fortawesome/free-solid-svg-icons';
+
 import useHassState from '../hooks/useHassState';
 import { Panel, PanelInner, PanelTitle } from './ui/PanelPrimitives';
 
@@ -12,26 +15,25 @@ const Wrapper = styled(Panel).attrs({
 
 const Level = styled.div`
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: minmax(2.5rem, 3rem) minmax(0, 1fr) auto;
 	align-items: center;
-	justify-items: center;
-	gap: 0.35rem;
-	padding: 0.7rem 0.5rem;
+	gap: 0.85rem;
+	padding: 0.85rem 0.9rem;
 	border-radius: var(--radius-lg);
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	text-align: center;
 `;
 
 const LevelsList = styled.div`
-	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 0.55rem;
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.7rem;
 `;
 
 const LevelItem = styled.div`
 	margin: 0;
-	font-size: 0.92rem;
+	font-size: 1.05rem;
 `;
 
 const Label = styled(LevelItem)`
@@ -51,8 +53,16 @@ const Temp = styled(LevelItem)`
 	color: var(--text-primary);
 `;
 const Humidity = styled(LevelItem)`
-	justify-self: center;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	justify-self: end;
 	color: var(--text-secondary);
+`;
+
+const HumidityIcon = styled(FontAwesomeIcon)`
+	font-size: 0.8rem;
+	color: var(--accent-cyan);
 `;
 
 const Levels = () => {
@@ -73,17 +83,26 @@ const Levels = () => {
 					<Level>
 						<Label>B</Label>
 						<Temp>{basementTemp}°</Temp>
-						<Humidity>{basementHumidity}%</Humidity>
+						<Humidity>
+							<HumidityIcon icon={faDroplet} />
+							{basementHumidity}%
+						</Humidity>
 					</Level>
 					<Level>
 						<Label>1</Label>
 						<Temp>{mainFloorTemp}°</Temp>
-						<Humidity>{mainFloorHumidity}%</Humidity>
+						<Humidity>
+							<HumidityIcon icon={faDroplet} />
+							{mainFloorHumidity}%
+						</Humidity>
 					</Level>
 					<Level>
 						<Label>2</Label>
 						<Temp>{upstairsTemp}°</Temp>
-						<Humidity>{upstairsHumidity}%</Humidity>
+						<Humidity>
+							<HumidityIcon icon={faDroplet} />
+							{upstairsHumidity}%
+						</Humidity>
 					</Level>
 				</LevelsList>
 			</PanelInner>

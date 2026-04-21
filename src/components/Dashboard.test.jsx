@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import Dashboard from '../Dashboard';
@@ -37,16 +37,21 @@ describe('Dashboard', () => {
 		renderWithEntities(<Dashboard />, { entities });
 
 		expect(
-			screen.getByRole('heading', { name: 'Outdoor climate' }),
+			screen.getByRole('heading', { name: 'Outdoor Climate' }),
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole('region', { name: 'Outdoor climate' }),
+			screen.getByRole('region', { name: 'Outdoor Climate' }),
 		).toBeInTheDocument();
 		expect(
-			screen.getByRole('heading', { name: 'Indoor climate' }),
+			screen.getByRole('heading', { name: 'Main Floor Climate' }),
 		).toBeInTheDocument();
 		expect(screen.getByText(/58/)).toBeInTheDocument();
-		expect(screen.getByText(/71/)).toBeInTheDocument();
+		expect(
+			within(
+				screen.getByRole('region', { name: 'Main Floor Climate' }),
+			).getByText(/70/),
+		).toBeInTheDocument();
+		expect(screen.queryByText(/71/)).not.toBeInTheDocument();
 		expect(screen.queryByText(/101/)).not.toBeInTheDocument();
 		expect(
 			screen.getByRole('heading', { name: 'Home levels' }),

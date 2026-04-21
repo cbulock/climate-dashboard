@@ -57,9 +57,11 @@ export const HeroValue = styled.div`
 const AutoFitValueFrame = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 	min-height: 0;
+	text-align: center;
 `;
 
 const AutoFitValueText = styled.span`
@@ -70,6 +72,7 @@ const AutoFitValueText = styled.span`
 	letter-spacing: -0.06em;
 	color: var(--text-primary);
 	font-size: ${({ $fontSize }) => `${$fontSize}px`};
+	text-align: center;
 `;
 
 export const AutoFitHeroValue = ({

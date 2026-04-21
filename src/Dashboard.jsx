@@ -106,7 +106,7 @@ const Dashboard = () => {
 	const showHotTub = isHotTubEnabled();
 
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
-	const indoorTemp = useHassState('sensor.indoor_temp');
+	const indoorTemp = useHassState('sensor.main_floor_temp');
 	const outdoorHumidity = useHassState('sensor.outdoor_humidity');
 	const indoorHumidity = useHassState('sensor.indoor_humidity');
 
@@ -119,7 +119,7 @@ const Dashboard = () => {
 					<ClimateHeader>
 						<ClimateMeta>
 							<PanelTitle id="outdoor-climate-heading">
-								Outdoor climate
+								Outdoor Climate
 							</PanelTitle>
 						</ClimateMeta>
 						<HumidityBadge>
@@ -137,7 +137,7 @@ const Dashboard = () => {
 					<ClimateHeader>
 						<ClimateMeta>
 							<PanelTitle id="indoor-climate-heading">
-								Indoor climate
+								Main Floor Climate
 							</PanelTitle>
 						</ClimateMeta>
 						<HumidityBadge>

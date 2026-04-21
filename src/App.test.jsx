@@ -11,10 +11,10 @@ test('renders the dashboard shell labels', () => {
 	render(<App />);
 
 	expect(
-		screen.getByRole('heading', { name: 'Outdoor climate' }),
+		screen.getByRole('heading', { name: 'Outdoor Climate' }),
 	).toBeInTheDocument();
 	expect(
-		screen.getByRole('heading', { name: 'Indoor climate' }),
+		screen.getByRole('heading', { name: 'Main Floor Climate' }),
 	).toBeInTheDocument();
 	expect(screen.getByRole('heading', { name: 'Wind' })).toBeInTheDocument();
 	expect(screen.getByText('MPH')).toBeInTheDocument();
