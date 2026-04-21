@@ -108,7 +108,7 @@ const Dashboard = () => {
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
 	const indoorTemp = useHassState('sensor.main_floor_temp');
 	const outdoorHumidity = useHassState('sensor.outdoor_humidity');
-	const indoorHumidity = useHassState('sensor.indoor_humidity');
+	const indoorHumidity = useHassState('sensor.main_floor_humidity');
 
 	const hotTubTemp = useHassState('sensor.hot_tub_temp');
 
