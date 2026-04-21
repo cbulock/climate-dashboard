@@ -72,7 +72,7 @@ const CenterReadout = styled.div`
 	transform: translate(-50%, -50%);
 	width: 52%;
 	height: 42%;
-	z-index: 2;
+	z-index: 3;
 `;
 
 const Speed = styled(AutoFitHeroValue)`
@@ -115,17 +115,19 @@ const TickMask = styled.div`
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 78%;
-	height: 78%;
+	width: 81%;
+	height: 81%;
 	transform: translate(-50%, -50%);
 	border-radius: 50%;
 	background: radial-gradient(
 		circle,
-		rgba(8, 15, 28, 0.92),
+		rgba(8, 15, 28, 0.96),
 		rgba(6, 11, 20, 0.98)
 	);
-	box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.02);
-	z-index: 1;
+	box-shadow:
+		inset 0 0 18px rgba(255, 255, 255, 0.02),
+		0 0 0 0.2rem rgba(6, 11, 20, 0.92);
+	z-index: 2;
 `;
 
 const Direction1 = styled(DirectionTick)`
@@ -151,22 +153,20 @@ const DirectionLabel = styled.p`
 	display: grid;
 	place-items: center;
 	margin: 0;
-	min-width: 2rem;
-	min-height: 2rem;
-	padding: 0 0.3rem;
+	min-width: clamp(2.15rem, 5.2vw, 2.7rem);
+	min-height: clamp(2.15rem, 5.2vw, 2.7rem);
+	padding: 0 0.45rem;
 	border-radius: 999px;
-	font-size: 0.82rem;
+	font-size: clamp(0.95rem, 2.2vw, 1.15rem);
 	font-weight: 800;
 	letter-spacing: 0.08em;
-	color: rgba(248, 250, 252, 0.72);
+	color: rgba(248, 250, 252, 0.82);
 	background: rgba(6, 11, 20, 0.92);
 	box-shadow:
-		0 0 0 0.35rem rgba(6, 11, 20, 0.55),
+		0 0 0 0.45rem rgba(6, 11, 20, 0.62),
 		0 0 18px rgba(2, 6, 23, 0.45);
 	text-shadow: 0 0 18px rgba(2, 6, 23, 0.75);
-	z-index: 3;
-	min-width: 1.7rem;
-	min-height: 1.7rem;
+	z-index: 5;
 `;
 
 const North = styled(DirectionLabel)`
