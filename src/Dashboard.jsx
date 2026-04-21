@@ -145,7 +145,7 @@ const Dashboard = () => {
 							{indoorHumidity}%
 						</HumidityBadge>
 					</ClimateHeader>
-					<HeroMetric maxFontSize={280} minFontSize={88}>
+					<HeroMetric maxFontSize={272} minFontSize={82}>
 						{indoorTemp}°
 					</HeroMetric>
 				</PanelInner>
