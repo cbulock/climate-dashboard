@@ -38,7 +38,7 @@ const GlobalStyle = createGlobalStyle`
 		min-height: 100dvh;
 		font-family: var(--sans-serif-font);
 		background:
-			linear-gradient(180deg, rgba(15, 27, 46, 0.28), rgba(7, 17, 31, 0.08)),
+			linear-gradient(180deg, rgba(15, 27, 46, 0.12), rgba(7, 17, 31, 0.04)),
 			var(--bg-base);
 		color: var(--text-primary);
 		-webkit-font-smoothing: antialiased;
@@ -53,11 +53,11 @@ const GlobalStyle = createGlobalStyle`
 		z-index: -2;
 		pointer-events: none;
 		background:
-			radial-gradient(ellipse 56% 46% at center, rgba(34, 211, 238, 0.22), transparent 72%),
-			radial-gradient(ellipse 48% 40% at center, rgba(251, 191, 36, 0.2), transparent 72%),
-			radial-gradient(ellipse 52% 42% at center, rgba(56, 189, 248, 0.11), transparent 74%),
-			radial-gradient(ellipse 44% 36% at center, rgba(249, 115, 22, 0.14), transparent 72%),
-			radial-gradient(circle at center, rgba(7, 17, 31, 0), rgba(7, 17, 31, 0.18) 72%);
+			radial-gradient(ellipse 56% 46% at center, rgba(34, 211, 238, 0.10), transparent 72%),
+			radial-gradient(ellipse 48% 40% at center, rgba(251, 191, 36, 0.09), transparent 72%),
+			radial-gradient(ellipse 52% 42% at center, rgba(56, 189, 248, 0.05), transparent 74%),
+			radial-gradient(ellipse 44% 36% at center, rgba(249, 115, 22, 0.06), transparent 72%),
+			radial-gradient(circle at center, rgba(7, 17, 31, 0), rgba(7, 17, 31, 0.08) 72%);
 		background-repeat: no-repeat;
 		background-size:
 			150% 150%,
@@ -77,10 +77,10 @@ const GlobalStyle = createGlobalStyle`
 		z-index: -1;
 		pointer-events: none;
 		background:
-			radial-gradient(ellipse 42% 34% at center, rgba(96, 165, 250, 0.14), transparent 72%),
-			radial-gradient(ellipse 40% 32% at center, rgba(45, 212, 191, 0.1), transparent 70%),
-			radial-gradient(ellipse 34% 28% at center, rgba(251, 146, 60, 0.1), transparent 72%),
-			radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.28) 72%);
+			radial-gradient(ellipse 42% 34% at center, rgba(96, 165, 250, 0.06), transparent 72%),
+			radial-gradient(ellipse 40% 32% at center, rgba(45, 212, 191, 0.04), transparent 70%),
+			radial-gradient(ellipse 34% 28% at center, rgba(251, 146, 60, 0.04), transparent 72%),
+			radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.12) 72%);
 		background-repeat: no-repeat;
 		background-size:
 			132% 132%,
