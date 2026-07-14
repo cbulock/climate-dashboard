@@ -7,6 +7,15 @@ vi.mock('./hooks/useSubscribe', () => ({
 	default: vi.fn(),
 }));
 
+vi.mock('./hooks/useToasts', () => ({
+	default: () => [
+		{
+			name: 'hidden-alert',
+			description: 'Temporarily hidden alert',
+		},
+	],
+}));
+
 test('renders the dashboard shell labels', () => {
 	render(<App />);
 
@@ -18,4 +27,7 @@ test('renders the dashboard shell labels', () => {
 	).toBeInTheDocument();
 	expect(screen.getByRole('heading', { name: 'Wind' })).toBeInTheDocument();
 	expect(screen.getByText('MPH')).toBeInTheDocument();
+	expect(
+		screen.queryByText('Temporarily hidden alert'),
+	).not.toBeInTheDocument();
 });

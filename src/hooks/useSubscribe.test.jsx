@@ -44,10 +44,18 @@ describe('useSubscribe', () => {
 		delete import.meta.env.VITE_HASS_TOKEN;
 
 		const setEntities = vi.fn();
+		const setConnection = vi.fn();
 
 		expect(() =>
 			render(
-				<EntitiesContext.Provider value={{ entities: {}, setEntities }}>
+				<EntitiesContext.Provider
+					value={{
+						entities: {},
+						setEntities,
+						connection: null,
+						setConnection,
+					}}
+				>
 					<HookProbe />
 				</EntitiesContext.Provider>,
 			),
@@ -59,31 +67,42 @@ describe('useSubscribe', () => {
 		const unsubscribe = vi.fn();
 		const close = vi.fn();
 		const connection = { close };
+		const setConnection = vi.fn();
 
 		createLongLivedTokenAuth.mockReturnValue('auth');
 		createConnection.mockResolvedValue(connection);
 		subscribeEntities.mockReturnValue(unsubscribe);
 
 		const { unmount } = render(
-			<EntitiesContext.Provider value={{ entities: {}, setEntities }}>
+			<EntitiesContext.Provider
+				value={{
+					entities: {},
+					setEntities,
+					connection: null,
+					setConnection,
+				}}
+			>
 				<HookProbe />
 			</EntitiesContext.Provider>,
 		);
 
 		await waitFor(() => {
 			expect(createConnection).toHaveBeenCalled();
+			expect(setConnection).toHaveBeenCalledWith(connection);
 		});
 
 		unmount();
 
 		expect(unsubscribe).toHaveBeenCalled();
 		expect(close).toHaveBeenCalled();
+		expect(setConnection).toHaveBeenLastCalledWith(null);
 	});
 
 	it('closes late connections that resolve after unmount', async () => {
 		const setEntities = vi.fn();
 		const close = vi.fn();
 		const connection = { close };
+		const setConnection = vi.fn();
 
 		createLongLivedTokenAuth.mockReturnValue('auth');
 		createConnection.mockImplementation(
@@ -94,7 +113,14 @@ describe('useSubscribe', () => {
 		);
 
 		const { unmount } = render(
-			<EntitiesContext.Provider value={{ entities: {}, setEntities }}>
+			<EntitiesContext.Provider
+				value={{
+					entities: {},
+					setEntities,
+					connection: null,
+					setConnection,
+				}}
+			>
 				<HookProbe />
 			</EntitiesContext.Provider>,
 		);
@@ -106,5 +132,7 @@ describe('useSubscribe', () => {
 		});
 
 		expect(subscribeEntities).not.toHaveBeenCalled();
+		expect(setConnection).toHaveBeenCalledTimes(1);
+		expect(setConnection).toHaveBeenCalledWith(null);
 	});
 });

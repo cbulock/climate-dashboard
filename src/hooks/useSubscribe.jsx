@@ -10,7 +10,7 @@ import { EntitiesContext } from '../context/Entities';
 import getHassConfig from '../lib/env';
 
 const useSubscribe = () => {
-	const { setEntities } = useContext(EntitiesContext);
+	const { setConnection, setEntities } = useContext(EntitiesContext);
 	const { url, token } = getHassConfig();
 
 	useEffect(() => {
@@ -29,6 +29,7 @@ const useSubscribe = () => {
 			}
 
 			connection = nextConnection;
+			setConnection(nextConnection);
 			unsubscribe = subscribeEntities(connection, (entities) => {
 				if (isActive) {
 					setEntities(entities);
@@ -42,8 +43,9 @@ const useSubscribe = () => {
 			isActive = false;
 			unsubscribe?.();
 			connection?.close();
+			setConnection(null);
 		};
-	}, [setEntities, url, token]);
+	}, [setConnection, setEntities, url, token]);
 };
 
 export default useSubscribe;

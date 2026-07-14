@@ -5,7 +5,14 @@ import { EntitiesContext } from '../context/Entities';
 
 const renderWithEntities = (ui, { entities = {} } = {}) =>
 	render(
-		<EntitiesContext.Provider value={{ entities, setEntities: vi.fn() }}>
+		<EntitiesContext.Provider
+			value={{
+				entities,
+				setEntities: vi.fn(),
+				connection: null,
+				setConnection: vi.fn(),
+			}}
+		>
 			{ui}
 		</EntitiesContext.Provider>,
 	);

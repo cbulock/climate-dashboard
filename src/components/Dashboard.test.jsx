@@ -22,6 +22,8 @@ const entities = {
 	'sensor.basement_humidity': { state: '50' },
 	'sensor.wind_avg': { state: '12' },
 	'sensor.wind_direction': { state: '180' },
+	'sensor.pond_temp': { state: '64' },
+	'sensor.uv_index': { state: '8' },
 };
 
 describe('Dashboard', () => {
@@ -56,8 +58,26 @@ describe('Dashboard', () => {
 		expect(
 			screen.getByRole('heading', { name: 'Home levels' }),
 		).toBeInTheDocument();
+		expect(
+			within(screen.getByRole('region', { name: 'Home levels' }))
+				.getAllByText(/^(2|1|B)$/)
+				.map(({ textContent }) => textContent),
+		).toEqual(['2', '1', 'B']);
 		expect(screen.getByRole('heading', { name: 'Wind' })).toBeInTheDocument();
 		expect(screen.getByText('MPH')).toBeInTheDocument();
+		expect(
+			screen.getByRole('region', { name: 'Pond and UV' }),
+		).toBeInTheDocument();
+		expect(screen.getByRole('heading', { name: 'Pond' })).toBeInTheDocument();
+		expect(
+			screen.getByRole('heading', { name: 'UV index' }),
+		).toBeInTheDocument();
+		expect(screen.getByText(/64/)).toBeInTheDocument();
+		expect(screen.getByText('8')).toBeInTheDocument();
+		expect(screen.getByText('Very high UV')).toBeInTheDocument();
+		const uvCard = screen.getByText('Very high UV').closest('[data-uv-risk]');
+
+		expect(uvCard).toHaveAttribute('data-uv-risk', 'very-high');
 	});
 
 	it('shows the hot tub panel when the feature flag is enabled', () => {
@@ -66,5 +86,28 @@ describe('Dashboard', () => {
 		renderWithEntities(<Dashboard />, { entities });
 
 		expect(screen.getByText(/101/)).toBeInTheDocument();
+	});
+
+	it('marks temperature panels when raw values exceed heat thresholds', () => {
+		renderWithEntities(<Dashboard />, {
+			entities: {
+				...entities,
+				'sensor.outdoor_temp': { state: '100.1' },
+				'sensor.main_floor_temp': { state: '80.1' },
+				'sensor.pond_temp': { state: '90.1' },
+			},
+		});
+
+		expect(
+			screen.getByRole('region', { name: 'Outdoor Climate' }),
+		).toHaveAttribute('data-heat-warning', 'true');
+		expect(
+			screen.getByRole('region', { name: 'Main Floor Climate' }),
+		).toHaveAttribute('data-heat-warning', 'true');
+		expect(
+			screen
+				.getByRole('heading', { name: 'Pond' })
+				.closest('[data-heat-warning]'),
+		).toHaveAttribute('data-heat-warning', 'true');
 	});
 });

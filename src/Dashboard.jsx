@@ -1,14 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDroplet, faHotTubPerson } from '@fortawesome/free-solid-svg-icons';
 
 import useSubscribe from './hooks/useSubscribe';
 import useHassState from './hooks/useHassState';
+import useHassHistory from './hooks/useHassHistory';
 import { isHotTubEnabled } from './lib/env';
+import { smoothHistoryPoints } from './lib/history';
 
 import Levels from './components/Levels';
+import SecondaryMetrics from './components/SecondaryMetrics';
 import Wind from './components/Wind';
+import Sparkline from './components/ui/Sparkline';
 import {
 	AccentBadge,
 	AutoFitHeroValue,
@@ -18,6 +22,21 @@ import {
 	PanelTitle,
 	SubtleText,
 } from './components/ui/PanelPrimitives';
+
+const HISTORY_ENTITY_IDS = [
+	'sensor.pond_temp',
+	'sensor.uv_index',
+	'sensor.outdoor_temp',
+	'sensor.main_floor_temp',
+	'sensor.wind_avg',
+];
+const TEMPERATURE_SMOOTHING_WINDOW = 15;
+const heatWarningGlow = css`
+	border-color: rgba(248, 113, 113, 0.72);
+	box-shadow:
+		inset 0 0 34px rgba(248, 113, 113, 0.12),
+		0 0 14px rgba(248, 113, 113, 0.3);
+`;
 
 const HumidityBadge = styled(AccentBadge)`
 	font-size: 1.5rem;
@@ -40,12 +59,12 @@ const Main = styled.main`
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	grid-template-areas: ${({ $showHotTub }) =>
 		$showHotTub
-			? "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind' 'HotTub HotTub'"
-			: "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind'"};
+			? "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind' 'HotTub HotTub' 'Secondary Secondary'"
+			: "'Outdoors Outdoors' 'Indoors Indoors' 'Levels Wind' 'Secondary Secondary'"};
 	grid-template-rows: ${({ $showHotTub }) =>
 		$showHotTub
-			? 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr)'
-			: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr)'};
+			? 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(7rem, 0.55fr)'
+			: 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(7rem, 0.55fr)'};
 	gap: 0.7rem;
 	width: 100%;
 	min-height: 100dvh;
@@ -56,6 +75,7 @@ const Main = styled.main`
 
 const ClimatePanel = styled(Panel)`
 	min-height: 0;
+	${({ $isHeatWarning }) => $isHeatWarning && heatWarningGlow}
 `;
 
 const Outdoors = styled(ClimatePanel).attrs({
@@ -89,7 +109,22 @@ const ClimateMeta = styled.div`
 	gap: 0.4rem;
 `;
 const HeroMetric = styled(AutoFitHeroValue)`
+	position: relative;
+	z-index: 1;
 	margin: auto 0;
+`;
+const TrendFrame = styled.div`
+	position: relative;
+	display: flex;
+	flex: 1;
+	min-height: 0;
+	overflow: visible;
+`;
+const ClimateSparkline = styled(Sparkline)`
+	z-index: 0;
+	inset: 0 auto 0 -1rem;
+	width: calc(100% + 2rem + 2px);
+	height: 100%;
 `;
 const HotTubTemp = styled.div`
 	display: flex;
@@ -104,9 +139,20 @@ const HotTubTemp = styled.div`
 const Dashboard = () => {
 	useSubscribe();
 	const showHotTub = isHotTubEnabled();
+	const history = useHassHistory(HISTORY_ENTITY_IDS);
+	const outdoorHistory = smoothHistoryPoints(
+		history['sensor.outdoor_temp'],
+		TEMPERATURE_SMOOTHING_WINDOW,
+	);
+	const indoorHistory = smoothHistoryPoints(
+		history['sensor.main_floor_temp'],
+		TEMPERATURE_SMOOTHING_WINDOW,
+	);
 
 	const outdoorTemp = useHassState('sensor.outdoor_temp');
+	const outdoorTempRaw = useHassState('sensor.outdoor_temp', false);
 	const indoorTemp = useHassState('sensor.main_floor_temp');
+	const indoorTempRaw = useHassState('sensor.main_floor_temp', false);
 	const outdoorHumidity = useHassState('sensor.outdoor_humidity');
 	const indoorHumidity = useHassState('sensor.main_floor_humidity');
 
@@ -114,7 +160,10 @@ const Dashboard = () => {
 
 	return (
 		<Main $showHotTub={showHotTub}>
-			<Outdoors>
+			<Outdoors
+				$isHeatWarning={outdoorTempRaw > 100}
+				data-heat-warning={outdoorTempRaw > 100 ? 'true' : 'false'}
+			>
 				<PanelInner>
 					<ClimateHeader>
 						<ClimateMeta>
@@ -127,12 +176,22 @@ const Dashboard = () => {
 							{outdoorHumidity}%
 						</HumidityBadge>
 					</ClimateHeader>
-					<HeroMetric maxFontSize={320} minFontSize={96}>
-						{outdoorTemp}°
-					</HeroMetric>
+					<TrendFrame>
+						<ClimateSparkline
+							points={outdoorHistory}
+							color="var(--accent-cyan)"
+							opacity={0.24}
+						/>
+						<HeroMetric maxFontSize={320} minFontSize={96}>
+							{outdoorTemp}°
+						</HeroMetric>
+					</TrendFrame>
 				</PanelInner>
 			</Outdoors>
-			<IndoorPanel>
+			<IndoorPanel
+				$isHeatWarning={indoorTempRaw > 80}
+				data-heat-warning={indoorTempRaw > 80 ? 'true' : 'false'}
+			>
 				<PanelInner>
 					<ClimateHeader>
 						<ClimateMeta>
@@ -145,9 +204,16 @@ const Dashboard = () => {
 							{indoorHumidity}%
 						</HumidityBadge>
 					</ClimateHeader>
-					<HeroMetric maxFontSize={272} minFontSize={82}>
-						{indoorTemp}°
-					</HeroMetric>
+					<TrendFrame>
+						<ClimateSparkline
+							points={indoorHistory}
+							color="var(--accent-amber)"
+							opacity={0.22}
+						/>
+						<HeroMetric maxFontSize={272} minFontSize={82}>
+							{indoorTemp}°
+						</HeroMetric>
+					</TrendFrame>
 				</PanelInner>
 			</IndoorPanel>
 			{showHotTub && (
@@ -163,7 +229,8 @@ const Dashboard = () => {
 				</HotTub>
 			)}
 			<Levels />
-			<Wind />
+			<Wind history={history['sensor.wind_avg']} />
+			<SecondaryMetrics history={history} />
 		</Main>
 	);
 };

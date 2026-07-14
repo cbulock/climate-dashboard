@@ -4,11 +4,13 @@ import Toasts from './components/Toasts';
 import { EntitiesProvider } from './context/Entities';
 import ErrorBoundary from './ErrorBoundary';
 
+const SHOW_NOTIFICATIONS = false;
+
 const App = () => (
 	<ErrorBoundary>
 		<GlobalStyle />
 		<EntitiesProvider>
-			<Toasts />
+			{SHOW_NOTIFICATIONS && <Toasts />}
 			<Dashboard />
 		</EntitiesProvider>
 	</ErrorBoundary>

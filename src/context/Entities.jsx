@@ -5,8 +5,12 @@ const EntitiesContext = createContext();
 
 const EntitiesProvider = ({ children }) => {
 	const [entities, setEntities] = useState({});
+	const [connection, setConnection] = useState(null);
 
-	const value = useMemo(() => ({ entities, setEntities }), [entities]);
+	const value = useMemo(
+		() => ({ entities, setEntities, connection, setConnection }),
+		[connection, entities],
+	);
 
 	return (
 		<EntitiesContext.Provider value={value}>

@@ -6,8 +6,9 @@ import Toast from './Toast';
 
 const SToasts = styled.div`
 	position: fixed;
-	right: clamp(1rem, 2vw, 2rem);
-	top: clamp(1rem, 2vw, 2rem);
+	left: 50%;
+	bottom: clamp(1rem, 2vw, 2rem);
+	transform: translateX(-50%);
 	width: min(28rem, calc(100vw - 2rem));
 	display: flex;
 	flex-direction: column;

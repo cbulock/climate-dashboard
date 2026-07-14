@@ -1,9 +1,12 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
 
 import useHassState from '../hooks/useHassState';
+import averageHistoryPoints from '../lib/history';
+import Sparkline from './ui/Sparkline';
 import {
 	AutoFitHeroValue,
 	Panel,
@@ -130,6 +133,13 @@ const TickMask = styled.div`
 	z-index: 2;
 `;
 
+const WindSparkline = styled(Sparkline)`
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+`;
+
 const Direction1 = styled(DirectionTick)`
 	transform: translate(-50%);
 `;
@@ -161,10 +171,6 @@ const DirectionLabel = styled.p`
 	font-weight: 800;
 	letter-spacing: 0.08em;
 	color: rgba(248, 250, 252, 0.82);
-	background: rgba(6, 11, 20, 0.92);
-	box-shadow:
-		0 0 0 0.45rem rgba(6, 11, 20, 0.62),
-		0 0 18px rgba(2, 6, 23, 0.45);
 	text-shadow: 0 0 18px rgba(2, 6, 23, 0.75);
 	z-index: 5;
 `;
@@ -198,9 +204,10 @@ const WindBody = styled.div`
 	min-height: 0;
 `;
 
-const Wind = () => {
+const Wind = ({ history }) => {
 	const speed = useHassState('sensor.wind_avg');
 	const direction = useHassState('sensor.wind_direction');
+	const averagedHistory = averageHistoryPoints(history, 15);
 
 	return (
 		<Wrapper>
@@ -223,6 +230,11 @@ const Wind = () => {
 								<Direction4 />
 							</DirectionTicks>
 							<TickMask />
+							<WindSparkline
+								points={averagedHistory}
+								color="var(--accent-cyan)"
+								opacity={0.09}
+							/>
 							<CaretWrapper $direction={direction}>
 								<Caret icon={faCaretUp} />
 							</CaretWrapper>
@@ -238,6 +250,19 @@ const Wind = () => {
 			</PanelInner>
 		</Wrapper>
 	);
+};
+
+Wind.propTypes = {
+	history: PropTypes.arrayOf(
+		PropTypes.shape({
+			timestamp: PropTypes.number.isRequired,
+			value: PropTypes.number.isRequired,
+		}),
+	),
+};
+
+Wind.defaultProps = {
+	history: [],
 };
 
 export default Wind;

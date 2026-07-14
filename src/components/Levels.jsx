@@ -81,11 +81,11 @@ const Levels = () => {
 				</div>
 				<LevelsList>
 					<Level>
-						<Label>B</Label>
-						<Temp>{basementTemp}°</Temp>
+						<Label>2</Label>
+						<Temp>{upstairsTemp}°</Temp>
 						<Humidity>
 							<HumidityIcon icon={faDroplet} />
-							{basementHumidity}%
+							{upstairsHumidity}%
 						</Humidity>
 					</Level>
 					<Level>
@@ -97,11 +97,11 @@ const Levels = () => {
 						</Humidity>
 					</Level>
 					<Level>
-						<Label>2</Label>
-						<Temp>{upstairsTemp}°</Temp>
+						<Label>B</Label>
+						<Temp>{basementTemp}°</Temp>
 						<Humidity>
 							<HumidityIcon icon={faDroplet} />
-							{upstairsHumidity}%
+							{basementHumidity}%
 						</Humidity>
 					</Level>
 				</LevelsList>

@@ -17,7 +17,14 @@ Probe.propTypes = {
 
 const renderProbe = (entities, entityId) =>
 	render(
-		<EntitiesContext.Provider value={{ entities, setEntities: vi.fn() }}>
+		<EntitiesContext.Provider
+			value={{
+				entities,
+				setEntities: vi.fn(),
+				connection: null,
+				setConnection: vi.fn(),
+			}}
+		>
 			<Probe entityId={entityId} />
 		</EntitiesContext.Provider>,
 	);
@@ -33,5 +40,28 @@ describe('useHassState', () => {
 		renderProbe({ 'switch.pool_pump': { state: 'on' } }, 'switch.pool_pump');
 
 		expect(screen.getByText('on')).toBeInTheDocument();
+	});
+
+	it('can return an unrounded numeric state for threshold checks', () => {
+		const RawProbe = () => {
+			const value = useHassState('sensor.outdoor_temp', false);
+
+			return <span>{value}</span>;
+		};
+
+		render(
+			<EntitiesContext.Provider
+				value={{
+					entities: { 'sensor.outdoor_temp': { state: '100.1' } },
+					setEntities: vi.fn(),
+					connection: null,
+					setConnection: vi.fn(),
+				}}
+			>
+				<RawProbe />
+			</EntitiesContext.Provider>,
+		);
+
+		expect(screen.getByText('100.1')).toBeInTheDocument();
 	});
 });
